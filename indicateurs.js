@@ -182,8 +182,8 @@ function drawChart(canvasId, jours, field, monthKey) {
     pts.forEach(function (p) { ctx.beginPath(); ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2); ctx.fill(); });
     hoverPts = hoverPts.concat(pts);
   }
-  line('j0', '#22a050', 'J-0');
   line('j3', '#f97316', 'J-3');
+  line('j0', '#22a050', 'J-0');
   canvas._pts = hoverPts;
   bindCanvasHover(canvas);
 
