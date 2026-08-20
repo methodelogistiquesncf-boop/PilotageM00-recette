@@ -8,6 +8,7 @@
 // disparaît donc pas quand la case d'origine est réutilisée le lendemain.
 
 import { state, markDirty, todayISO, isoToDisplay, showConfirm, autoResize } from './state.js';
+import { saveFirebase } from './firebase.js';
 import { ensureAgentEmailsLoaded, buildResponsableCell } from './responsable-field.js';
 
 // Recalcule la hauteur d'une textarea auto-extensible dès qu'elle est
@@ -60,6 +61,7 @@ export function sendToAction(data) {
   if (doublon) { buildActions(); return; }
 
   state.actions.push(makeActionItem(data));
+  saveFirebase();
   buildActions();
   markDirty();
 }
@@ -79,6 +81,7 @@ export function toggleActionDone(id) {
   if (!a) return;
   a.done = !a.done;
   a.doneAt = a.done ? new Date().toISOString() : '';
+  saveFirebase();
   buildActions();
   markDirty();
 }
@@ -87,6 +90,7 @@ export async function deleteAction(id) {
   var ok = await showConfirm('Cette action sera définitivement supprimée. Cette opération est irréversible.', { title: 'Supprimer cette action ?' });
   if (!ok) return;
   state.actions = state.actions.filter(function (a) { return a.id !== id; });
+  saveFirebase();
   buildActions();
   markDirty();
 }
