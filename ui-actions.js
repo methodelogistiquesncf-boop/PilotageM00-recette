@@ -247,7 +247,7 @@ function buildActionRow(a) {
 
   tr.appendChild(textInputCell(a, 'date', 'jj/mm...', null, true));
   tr.appendChild(textInputCell(a, 'kit', 'KIT...', 'action-input action-kit-input', true));
-  tr.appendChild(textInputCell(a, 'symbole', 'SYMBOLE...', 'action-input action-symbole-input', true));
+  tr.appendChild(textareaCell(a, 'symbole', 'SYMBOLE...', 'action-input action-symbole-input', true));
   tr.appendChild(textareaCell(a, 'commentaire', 'Commentaire...'));
 
   tr.appendChild(buildResponsableCell(a, 'responsable', !!a.done));
