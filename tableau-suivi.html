@@ -156,12 +156,236 @@
                 display: none;
             }
         }
+    
+        /* Header styles - Identique à l'application principale */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+        }
+        
+        .app-info h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .app-info .version {
+            font-size: 12px;
+            color: #0066cc;
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .date-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .date-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .date-input-group label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .date-input-group input[type="date"] {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+        
+        .calendar-icon {
+            font-size: 16px;
+        }
+        
+        .sync-status {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .sync-status.synchronized {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .main-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .main-nav a {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .main-nav a:hover {
+            background: #f0f0f0;
+            color: #1a1a1a;
+        }
+        
+        .main-nav a.active {
+            background: #0066cc;
+            color: white;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .user-avatar {
+            font-size: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .user-role {
+            font-size: 10px;
+            color: #0066cc;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-logout {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: #dc3545;
+            color: white;
+        }
+        
+        @media (max-width: 1200px) {
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .header-right {
+                justify-content: center;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚂 Tableau de Suivi - Pilotage M00</h1>
-        <p class="subtitle">Environnement de Recette - Date de création: 21/08/2026 à 11:57</p>
+        
+        <!-- Header identique à l'application principale -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="app-info">
+                    <h1>Pilotage M00</h1>
+                    <span class="version">v2026.08.21</span>
+                </div>
+                <div class="date-section">
+                    <div class="date-input-group">
+                        <label>Date du jour :</label>
+                        <input type="date" id="date-du-jour" value="21/08/2026">
+                        <span class="calendar-icon">📅</span>
+                    </div>
+                    <div class="sync-status synchronized">
+                        <span>✓ Synchronisé</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <a href="suivi.html">Supermarché</a>
+                <a href="#">Rassemblement</a>
+                <a href="#">Actions</a>
+                <a href="indicateurs.html">Indicateurs</a>
+                <a href="#">Utilisateurs</a>
+                <a href="#">Aide</a>
+            </nav>
+            <div class="header-right">
+                <div class="user-profile">
+                    <span class="user-avatar">👤</span>
+                    <div class="user-info">
+                        <span class="user-name">Michael Frischherz</span>
+                        <span class="user-role">ADMINISTRATEUR</span>
+                    </div>
+                </div>
+                <button class="btn-logout">Déconnexion</button>
+            </div>
+        </header>
+
         
         <table>
             <thead>
