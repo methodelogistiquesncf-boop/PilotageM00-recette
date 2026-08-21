@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pointage — Pilotage M00</title>
+<link rel="stylesheet" href="suivi.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a4fa0">
+<link rel="icon" type="image/svg+xml" href="icons/logo.svg">
+<link rel="apple-touch-icon" href="icons/logo.svg">
+<script src="version.js"></script>
+<style>
+  body{opacity:0}body.ready{opacity:1;transition:opacity .18s ease}
+  .pointage-table{border-collapse:collapse;background:var(--surface);border:2px solid #555;width:100%}
+  .pointage-table th,.pointage-table td{border:1px solid #888;padding:8px;text-align:center}
+  .pointage-table th{background:#e0ddd6;font-size:12px;font-weight:700}
+  .pointage-table .station-header{background:#6366f1;color:#fff;font-weight:700;text-align:left;padding:6px 10px}
+  .pointage-table .engin-label{background:#dbd8d0;font-weight:700;text-align:left;padding:4px 8px;font-size:12px}
+  .pointage-circle{width:32px;height:32px;border-radius:50%;border:2px solid #888;background:#fff;display:inline-block;cursor:pointer;transition:all .15s}
+  .pointage-circle:hover{transform:scale(1.1);border-color:#1a4fa0}
+  .pointage-circle.green{background:#22a050;border-color:#1a7a3c}
+  .pointage-circle.red{background:#d03030;border-color:#a02020}
+  .pointage-circle.orange{background:#f97316;border-color:#ea580c}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div>
+    <h1>Pilotage M00</h1>
+    <button class="subtitle version-link" id="appVersionBtn" onclick="openVersions()" title="Historique des versions">…</button>
+  </div>
+  <div class="date-status-col">
+    <div class="date-box">
+      <label for="dateJour">Date du jour :</label>
+      <input type="date" id="dateJour">
+    </div>
+    <span id="fbStatus" class="sync">⏳ Connexion...</span>
+  </div>
+  <div class="main-tabs" id="mainTabs">
+    <button class="main-tab" onclick="location.href='suivi.html'">Supermarché</button>
+    <button class="main-tab" onclick="location.href='suivi.html#manquants'">Rassemblement</button>
+    <button class="main-tab" onclick="location.href='suivi.html#actions'">Actions</button>
+    <button class="main-tab" onclick="location.href='indicateurs.html'">Indicateurs</button>
+    <button class="main-tab active">Pointage</button>
+    <button class="main-tab" id="tabViewUsers" style="display:none" onclick="location.href='suivi.html#users'">Utilisateurs</button>
+    <button class="main-tab" onclick="location.href='suivi.html#aide'">Aide</button>
+  </div>
+  <div id="userBadge" style="display:none">
+    <div class="user-id-col">
+      <span id="userEmail"></span>
+      <span id="userRoleBadge" class="role-badge"></span>
+    </div>
+    <button id="btnLogout" onclick="doLogout()">Déconnexion</button>
+  </div>
+</div>
+
+<div class="view-panel active">
+  <div class="wrap" style="overflow-x:auto">
+    <table class="pointage-table" id="pointageTable">
+      <thead id="pointageThead"></thead>
+      <tbody id="pointageTbody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:20px;display:flex;gap:12px">
+    <button class="btn btn-primary" onclick="savePointage()">💾 Sauvegarder</button>
+    <button class="btn btn-ghost" onclick="exportPointageCSV()"> Export CSV</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script type="module" src="pointage.js"></script>
+<script src="recette.js"></script>
+
+<!-- Modal Historique des versions -->
+<div class="modal-overlay" id="versionsOverlay">
+  <div class="modal-box">
+    <button class="close-btn" onclick="closeVersions()">&#x2715;</button>
+    <h2>📦 Historique des versions</h2>
+    <div id="versionsList" class="versions-list"></div>
+  </div>
+</div>
+<style>
+  .version-link{background:none;border:none;cursor:pointer;font-size:13px;color:var(--accent);font-weight:700;padding:0;font-family:inherit}
+  .version-link:hover{text-decoration:underline}
+  .versions-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow-y:auto}
+  .version-entry{border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;background:var(--surface2)}
+  .version-entry.current{border-color:var(--accent);background:var(--accent-light)}
+  .version-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .version-tag{font-weight:700;color:var(--text)}
+  .version-current{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--accent)}
+  .version-date{margin-left:auto;font-size:12px;color:var(--muted)}
+  .version-msg{font-size:13px;color:var(--text)}
+</style>
+<script>
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function openVersions(){var hist=window.APP_HISTORY||[],cur=window.APP_VERSION||'dev',list=document.getElementById('versionsList');if(!hist.length){list.innerHTML='<p style="color:var(--muted)">Aucun historique disponible.</p>';}else{list.innerHTML=hist.map(function(h){var d=h.date?new Date(h.date):null;var ds=d?d.toLocaleDateString('fr-FR')+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';return'<div class="version-entry'+(h.version===cur?' current':'')+'"><div class="version-head"><span class="version-tag">'+esc(h.version)+'</span>'+(h.version===cur?'<span class="version-current">actuelle</span>':'')+'<span class="version-date">'+ds+'</span></div><div class="version-msg">'+esc(h.message||'')+'</div></div>'}).join('');}document.getElementById('versionsOverlay').classList.add('open');}
+  function closeVersions(){document.getElementById('versionsOverlay').classList.remove('open');}
+  document.getElementById('versionsOverlay').addEventListener('click',function(e){if(e.target===this)closeVersions();});
+</script>
+</body>
+</html>
