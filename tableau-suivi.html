@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Suivi - Pilotage M00</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            border: 2px solid #5568d3;
+            font-size: 14px;
+        }
+        
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border: 2px solid #ddd;
+            vertical-align: middle;
+        }
+        
+        .station-row {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            padding-left: 15px;
+        }
+        
+        .appro-row {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .checkbox-circle {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .checkbox-circle:hover {
+            background-color: #667eea;
+            transform: scale(1.1);
+        }
+        
+        .checkbox-circle.checked {
+            background-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+        
+        .checkbox-circle.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 18px;
+            position: relative;
+            top: -2px;
+            left: 5px;
+        }
+        
+        tr:hover td {
+            background-color: #f0f4ff;
+        }
+        
+        .date-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .btn-save {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .btn-save {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚂 Tableau de Suivi - Pilotage M00</h1>
+        <p class="subtitle">Environnement de Recette - Date de création: 21/08/2026 à 11:57</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Station / Critère</th>
+                    <th style="width: 18.75%;">
+                        <input type="date" class="date-input" id="date1" value="2026-08-21">
+                    </th>
+                    <th style="width: 18.75%;">
+                        <input type="date" class="date-input" id="date2" value="2026-08-22">
+                    </th>
+                    <th style="width: 18.75%;">
+                        <input type="date" class="date-input" id="date3" value="2026-08-23">
+                    </th>
+                    <th style="width: 18.75%;">
+                        <input type="date" class="date-input" id="date4" value="2026-08-24">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Station TP Mot -->
+                <tr>
+                    <td class="station-row"><strong>Station TP Mot</strong></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+                <tr>
+                    <td class="appro-row">Approuvé ou tot ?</td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+                
+                <!-- Station SC Mot -->
+                <tr>
+                    <td class="station-row"><strong>Station SC Mot</strong></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+                <tr>
+                    <td class="appro-row">Approuvé ou tot ?</td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+                
+                <!-- Station TT Mot -->
+                <tr>
+                    <td class="station-row"><strong>Station TT Mot</strong></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+                <tr>
+                    <td class="appro-row">Approuvé ou tot ?</td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                    <td><div class="checkbox-circle" onclick="toggleCheckbox(this)"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button class="btn-save" onclick="saveData()">💾 Sauvegarder les données</button>
+    </div>
+    
+    <script>
+        // Fonction pour activer/désactiver les cases à cocher
+        function toggleCheckbox(element) {
+            element.classList.toggle('checked');
+        }
+        
+        // Fonction pour sauvegarder les données (à connecter à Firebase ou localStorage)
+        function saveData() {
+            // Récupérer les dates
+            const dates = {
+                date1: document.getElementById('date1').value,
+                date2: document.getElementById('date2').value,
+                date3: document.getElementById('date3').value,
+                date4: document.getElementById('date4').value
+            };
+            
+            // Récupérer l'état des checkboxes
+            const checkboxes = document.querySelectorAll('.checkbox-circle');
+            const states = [];
+            checkboxes.forEach((cb, index) => {
+                states.push({
+                    index: index,
+                    checked: cb.classList.contains('checked')
+                });
+            });
+            
+            // Sauvegarder dans localStorage (ou envoyer à Firebase)
+            const data = {
+                dates: dates,
+                checkboxes: states,
+                savedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('pilotageM00_data', JSON.stringify(data));
+            
+            alert('✅ Données sauvegardées avec succès !\n\nLes données sont stockées dans le localStorage.\nPour une sauvegarde permanente, connectez-vous à Firebase.');
+            
+            console.log('Données sauvegardées:', data);
+        }
+        
+        // Charger les données au démarrage
+        window.onload = function() {
+            const savedData = localStorage.getItem('pilotageM00_data');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Restaurer les dates
+                if (data.dates) {
+                    Object.keys(data.dates).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input && data.dates[key]) {
+                            input.value = data.dates[key];
+                        }
+                    });
+                }
+                
+                // Restaurer les checkboxes
+                if (data.checkboxes) {
+                    const checkboxes = document.querySelectorAll('.checkbox-circle');
+                    data.checkboxes.forEach(item => {
+                        if (checkboxes[item.index] && item.checked) {
+                            checkboxes[item.index].classList.add('checked');
+                        }
+                    });
+                }
+                
+                console.log('Données restaurées avec succès');
+            }
+        };
+    </script>
+</body>
+</html>
